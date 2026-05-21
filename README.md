@@ -44,4 +44,5 @@ open terminal at klpython-terminal folder
 and:
 ```bash
 python source_1.2.0.py
+```
 i tested in python 3.10 but i think later will error
