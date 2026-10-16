@@ -1,6 +1,7 @@
 {
     "name": "KLpython-official-mirror",
     "bin": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin.json",
+    "pack-url": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin/",
     "pack": [
         "cd-1.0.0.py",
         "clear-1.0.0.py",
