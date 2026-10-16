@@ -1,0 +1,9 @@
+{
+    "name": "KLpython-official-mirror",
+    "bin": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin.json",
+    "pack": [
+        "cd-1.0.0.py",
+        "ls-1.0.0.py",
+        "run-1.0.0.py"
+    ]
+}
