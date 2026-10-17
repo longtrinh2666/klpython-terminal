@@ -3,7 +3,7 @@
     "bin": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin.json",
     "pack-url": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin/",
     "pack": [
-        "cat.py",
+        "cat-1.0.0.py",
         "cd-1.0.0.py",
         "clear-1.0.0.py",
         "cp-1.0.0.py",
