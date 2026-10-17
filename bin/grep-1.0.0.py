@@ -14,7 +14,7 @@ def register(commands, ENV):
         pattern = args[0]
         target_file = args[1]
         
-        curr_dir = ENV.get("current_dir", os.getcwd())
+        curr_dir = os.getcwd()
         
         if os.path.isabs(target_file):
             file_path = target_file

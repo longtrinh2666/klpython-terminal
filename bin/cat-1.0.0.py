@@ -12,7 +12,7 @@ def register(commands, ENV):
             return
 
         target_file = args[0]
-        curr_dir = ENV.get("current_dir", os.getcwd())
+        curr_dir = os.getcwd()
         
         # Xử lý đường dẫn linh hoạt (hỗ trợ cả đường dẫn tuyệt đối lẫn tương đối)
         if os.path.isabs(target_file):
