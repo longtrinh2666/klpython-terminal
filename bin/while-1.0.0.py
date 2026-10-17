@@ -2,7 +2,11 @@ author = "longtrinh2666"
 
 def register(commands, ENV):
     def eval_condition(cond_raw, env):
-        cond_str = cond_raw
+        cond_str = cond_raw.strip()
+        
+        if cond_str.lower() in ("true", "1", "yes"): return True
+        if cond_str.lower() in ("false", "0", "no"): return False
+
         for k, v in env.items():
             cond_str = cond_str.replace(f"${k}", str(v))
 
@@ -28,11 +32,10 @@ def register(commands, ENV):
             return
 
         cond_raw = " ".join(args).strip()
-        max_loops = 10000  # Giới hạn an toàn chống treo vòng lặp vô tận
+        max_loops = 10000  # Chống treo vòng lặp vô tận
         count = 0
 
         while eval_condition(cond_raw, env_to_use) and count < max_loops:
-            # Thực thi từng dòng trong block của vòng lặp
             should_break = False
             for line in block:
                 line = line.rstrip()
@@ -43,14 +46,15 @@ def register(commands, ENV):
                     should_break = True
                     break
                 if line == "continue":
-                    break # Thoát vòng lặp dòng hiện tại, nhảy sang vòng lặp kế tiếp
+                    break # Bỏ qua phần còn lại của vòng lặp hiện tại, quay lại kiểm tra điều kiện
 
                 parts = line.split()
-                sub_cmd, sub_args = parts[0], parts[1:]
-                if sub_cmd in commands:
-                    commands[sub_cmd](sub_args)
-                else:
-                    print(f"E: Unknown command '{sub_cmd}' in while-block")
+                if parts:
+                    sub_cmd, sub_args = parts[0], parts[1:]
+                    if sub_cmd in commands:
+                        commands[sub_cmd](sub_args)
+                    else:
+                        print(f"E: Unknown command '{sub_cmd}' in while-block")
 
             if should_break:
                 break

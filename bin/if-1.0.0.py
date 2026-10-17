@@ -2,7 +2,12 @@ author = "longtrinh2666"
 
 def register(commands, ENV):
     def eval_condition(cond_raw, env):
-        cond_str = cond_raw
+        cond_str = cond_raw.strip()
+        
+        # Hỗ trợ từ khóa cơ bản true/false
+        if cond_str.lower() in ("true", "1", "yes"): return True
+        if cond_str.lower() in ("false", "0", "no"): return False
+
         for k, v in env.items():
             cond_str = cond_str.replace(f"${k}", str(v))
 
@@ -29,7 +34,7 @@ def register(commands, ENV):
 
         cond_str = " ".join(args).replace("then", "").strip()
         
-        # 1. Kiểm tra nhánh IF chính
+        # 1. Nhánh IF chính
         if eval_condition(cond_str, env_to_use):
             if block:
                 for line in block:
@@ -43,7 +48,7 @@ def register(commands, ENV):
                         commands[sub_cmd](sub_args)
             return
 
-        # 2. Kiểm tra các nhánh ELIF
+        # 2. Nhánh ELIF
         if elif_branches:
             for e_cond, e_block in elif_branches:
                 if eval_condition(e_cond, env_to_use):
@@ -59,7 +64,7 @@ def register(commands, ENV):
                                 commands[sub_cmd](sub_args)
                     return
 
-        # 3. Nhánh ELSE cuối cùng
+        # 3. Nhánh ELSE
         if else_block:
             for line in else_block:
                 line = line.rstrip()

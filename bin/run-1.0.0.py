@@ -54,12 +54,11 @@ def run_file(filename, commands, ENV):
                     line = block_lines[i_b].rstrip()
                     stripped_line = line.strip()
                     
-                    # Bỏ qua dòng trống hoặc chú thích
                     if not stripped_line or stripped_line.startswith("#"):
                         i_b += 1
                         continue
 
-                    # 🛡️ CHẶN CÁC TỪ KHÓA CẤU TRÚC KHÔNG ĐƯỢC COI LÀ LỆNH THƯỜNG
+                    # Chặn các từ khóa cấu trúc không bị coi là lệnh thường
                     if stripped_line in ("break", "continue") or stripped_line.startswith("elif ") or stripped_line.startswith("else"):
                         i_b += 1
                         continue
@@ -105,7 +104,7 @@ def run_file(filename, commands, ENV):
                             return res
                         continue
 
-                    # Xử lý gán biến trong block
+                    # Gán biến trong block
                     if "=" in stripped_line and not stripped_line.startswith("export"):
                         key, value = stripped_line.split("=", 1)
                         ENV[key.strip()] = value.strip()
@@ -113,7 +112,6 @@ def run_file(filename, commands, ENV):
                         i_b += 1
                         continue
 
-                    # Thực thi lệnh thông thường
                     parts = stripped_line.split()
                     if parts:
                         cmd, args_sub = parts[0], parts[1:]
@@ -133,7 +131,6 @@ def run_file(filename, commands, ENV):
                     i += 1
                     continue
 
-                # 1. Phát hiện khối lệnh if
                 if stripped_line.startswith("if "):
                     cond = stripped_line[3:].split(":", 1)[0].strip()
                     block = []
@@ -167,7 +164,6 @@ def run_file(filename, commands, ENV):
                     commands["if"]([cond], block, elif_branches, else_block, ENV)
                     continue
 
-                # 2. Phát hiện khối lệnh while
                 if stripped_line.startswith("while "):
                     cond = stripped_line[6:].split(":", 1)[0].strip()
                     block = []
@@ -179,7 +175,6 @@ def run_file(filename, commands, ENV):
                     commands["while"]([cond], block, ENV, execute_block)
                     continue
 
-                # Gán biến cấp ngoài
                 if "=" in stripped_line and not stripped_line.startswith("export"):
                     key, value = stripped_line.split("=", 1)
                     ENV[key.strip()] = value.strip()
@@ -187,7 +182,6 @@ def run_file(filename, commands, ENV):
                     i += 1
                     continue
 
-                # Lệnh thông thường ở cấp ngoài
                 parts = stripped_line.split()
                 if parts:
                     cmd, args = parts[0], parts[1:]
