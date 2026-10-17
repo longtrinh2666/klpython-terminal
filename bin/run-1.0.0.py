@@ -15,10 +15,6 @@ def register(commands, ENV, name="run"):
 
 
 def detect_file_type_by_shebang(filename):
-    """
-    Đọc từ dòng 1 đến dòng 5 của file để tìm shebang (#!),
-    giúp nhận diện loại file mà không cần quan tâm đến phần đuôi mở rộng.
-    """
     try:
         with open(filename, "r", encoding="utf-8", errors="ignore") as f:
             for _ in range(5):
@@ -28,7 +24,6 @@ def detect_file_type_by_shebang(filename):
                 stripped = line.strip()
                 if stripped.startswith("#!"):
                     shebang = stripped[2:].strip().lower()
-                    
                     if "bash" in shebang or shebang == "/bin/sh" or shebang == "sh":
                         return "shell"
                     if "bin/run" in shebang or shebang.endswith("/run"):
@@ -49,7 +44,6 @@ def run_file(filename, commands, ENV):
     shebang_type = detect_file_type_by_shebang(filename)
 
     try:
-        # 1. Xử lý kịch bản KLPython (.kl hoặc #!/bin/run)
         if shebang_type == "klscript" or ext == ".kl":
             with open(filename, "r", encoding="utf-8") as f:
                 lines = f.readlines()
@@ -58,14 +52,26 @@ def run_file(filename, commands, ENV):
                 i_b = 0
                 while i_b < len(block_lines):
                     line = block_lines[i_b].rstrip()
-                    if not line or line.startswith("#"):
+                    stripped_line = line.strip()
+                    
+                    # Bỏ qua dòng trống hoặc chú thích
+                    if not stripped_line or stripped_line.startswith("#"):
                         i_b += 1
                         continue
-                    if line == "break": return "break"
-                    if line == "continue": return "continue"
 
-                    if line.startswith("if "):
-                        cond = line[3:].split(":", 1)[0].strip()
+                    # 🛡️ CHẶN CÁC TỪ KHÓA CẤU TRÚC KHÔNG ĐƯỢC COI LÀ LỆNH THƯỜNG
+                    if stripped_line in ("break", "continue") or stripped_line.startswith("elif ") or stripped_line.startswith("else"):
+                        i_b += 1
+                        continue
+
+                    if stripped_line == "break": 
+                        return "break"
+                    if stripped_line == "continue": 
+                        return "continue"
+
+                    # Xử lý khối if lồng nhau trong block
+                    if stripped_line.startswith("if "):
+                        cond = stripped_line[3:].split(":", 1)[0].strip()
                         sub_block = []
                         i_b += 1
                         while i_b < len(block_lines) and block_lines[i_b].startswith("    "):
@@ -95,17 +101,20 @@ def run_file(filename, commands, ENV):
                                 break
 
                         res = commands["if"]([cond], sub_block, elif_branches, else_block, ENV)
-                        if res in ("break", "continue"): return res
+                        if res in ("break", "continue"): 
+                            return res
                         continue
 
-                    if "=" in line and not line.startswith("export"):
-                        key, value = line.split("=", 1)
+                    # Xử lý gán biến trong block
+                    if "=" in stripped_line and not stripped_line.startswith("export"):
+                        key, value = stripped_line.split("=", 1)
                         ENV[key.strip()] = value.strip()
                         os.environ[key.strip()] = value.strip()
                         i_b += 1
                         continue
 
-                    parts = line.split()
+                    # Thực thi lệnh thông thường
+                    parts = stripped_line.split()
                     if parts:
                         cmd, args_sub = parts[0], parts[1:]
                         if cmd in commands:
@@ -118,12 +127,15 @@ def run_file(filename, commands, ENV):
             i = 0
             while i < len(lines):
                 line = lines[i].rstrip()
-                if not line or line.startswith("#"):
+                stripped_line = line.strip()
+                
+                if not stripped_line or stripped_line.startswith("#"):
                     i += 1
                     continue
 
-                if line.startswith("if "):
-                    cond = line[3:].split(":", 1)[0].strip()
+                # 1. Phát hiện khối lệnh if
+                if stripped_line.startswith("if "):
+                    cond = stripped_line[3:].split(":", 1)[0].strip()
                     block = []
                     i += 1
                     while i < len(lines) and lines[i].startswith("    "):
@@ -155,8 +167,9 @@ def run_file(filename, commands, ENV):
                     commands["if"]([cond], block, elif_branches, else_block, ENV)
                     continue
 
-                if line.startswith("while "):
-                    cond = line[6:].split(":", 1)[0].strip()
+                # 2. Phát hiện khối lệnh while
+                if stripped_line.startswith("while "):
+                    cond = stripped_line[6:].split(":", 1)[0].strip()
                     block = []
                     i += 1
                     while i < len(lines) and lines[i].startswith("    "):
@@ -166,14 +179,16 @@ def run_file(filename, commands, ENV):
                     commands["while"]([cond], block, ENV, execute_block)
                     continue
 
-                if "=" in line and not line.startswith("export"):
-                    key, value = line.split("=", 1)
+                # Gán biến cấp ngoài
+                if "=" in stripped_line and not stripped_line.startswith("export"):
+                    key, value = stripped_line.split("=", 1)
                     ENV[key.strip()] = value.strip()
                     os.environ[key.strip()] = value.strip()
                     i += 1
                     continue
 
-                parts = line.split()
+                # Lệnh thông thường ở cấp ngoài
+                parts = stripped_line.split()
                 if parts:
                     cmd, args = parts[0], parts[1:]
                     if cmd in commands:
@@ -182,18 +197,15 @@ def run_file(filename, commands, ENV):
                         print(f"E: Unknown command '{cmd}' in script")
                 i += 1
 
-        # 2. Xử lý file Shell script (.sh hoặc #!/bin/bash)
         elif shebang_type == "shell" or ext == ".sh":
             if platform.system() == "Linux":
                 subprocess.run(["bash", filename])
             else:
                 print("Unsupported OS for shell scripts")
 
-        # 3. Xử lý file Python (.py hoặc #!/usr/bin/python)
         elif shebang_type == "python" or ext == ".py":
             subprocess.run([sys.executable, filename])
 
-        # 4. Các định dạng thực thi khác trên Windows
         elif ext in (".exe", ".com") and platform.system() == "Windows":
             subprocess.run([filename])
         elif ext == ".bat" and platform.system() == "Windows":
