@@ -15,10 +15,14 @@ def register(commands, ENV):
         target_file = args[1]
         
         curr_dir = ENV.get("current_dir", os.getcwd())
-        file_path = os.path.abspath(os.path.join(curr_dir, target_file))
+        
+        if os.path.isabs(target_file):
+            file_path = target_file
+        else:
+            file_path = os.path.abspath(os.path.join(curr_dir, target_file))
 
         if not os.path.exists(file_path):
-            print(f"E: File not found '{target_file}'")
+            print(f"E: File not found '{target_file}' (Checked in: {curr_dir})")
             return
 
         try:
@@ -26,7 +30,6 @@ def register(commands, ENV):
             with open(file_path, "r", encoding="utf-8") as f:
                 for line_num, line in enumerate(f, 1):
                     if pattern in line:
-                        # In ra số dòng và nội dung chứa từ khóa (có loại bỏ khoảng trắng thừa ở đuôi dòng)
                         print(f"{line_num}: {line.rstrip()}")
                         matched_lines += 1
             
@@ -36,5 +39,4 @@ def register(commands, ENV):
         except Exception as e:
             print(f"E: Cannot read file: {e}")
 
-    # Đăng ký lệnh 'grep' vào hệ thống commands của terminal
     commands["grep"] = grep_cmd

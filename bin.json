@@ -1,6 +1,6 @@
 {
     "longtrinh2666": {
-        "cat-1.0.0.py": "8b86c2a6767d9e355d2743a724f4dc1c310ff1a2a6314084a35f45fc7ba514a2",
+        "cat-1.0.0.py": "74873e893002c43f46b2cc47a025afb74e21e566b0a5f1b8fb357e2b1785c746",
         "cd-1.0.0.py": "7e531ae3b9ed05d990365f84c6620447ceea58eb2310b47003238b2aa35dfbf3",
         "clear-1.0.0.py": "3f96f4f6005740cacea4aeafea1f959b6a6d3fdd8fd945dba5a0787ed0cee8fb",
         "cp-1.0.0.py": "128e1b6d85620fe9865d12959f99db59d9a57bc7fee601135a738642748553be",
@@ -11,7 +11,7 @@
         "exit-1.0.0.py": "bec225b7727988a0f3b1a3fc52a944b9bc5faea425e9329b6b72d4652d85e781",
         "export-1.0.0.py": "0d287a7bc5540a4139c30317c759be0aace1de3c518cc1f6a1589574473be8a4",
         "find-1.0.0.py": "03fd1bea862329e56ad634077d7d9da4d34448440f50c2a24deb5b15c1438c0e",
-        "grep-1.0.0.py": "870162b3ecdedc0c181d8a1f6d7bf644ddb30d341d5e07221dca3c0abb5c8304",
+        "grep-1.0.0.py": "581782d5be5b191b187fa3a1d5d17eb52a349e7fe342d59e3b185ea6ceed3178",
         "help-1.0.0.py": "9777540d7780ebead8d40d0d1ba66f340f1b34ce3819c351949f40901fccdca0",
         "if-1.0.0.py": "a2e52ca7eac25eabc6735ed9980f2320ae38cda5db7ac6767fcfd03defbda8f1",
         "ls-1.0.0.py": "585112dbe6ec354ceb0a1f1bc1fbb97d9229ea7f0c02aa816f6366b952744fed",

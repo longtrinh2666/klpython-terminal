@@ -2,17 +2,26 @@ author = "longtrinh2666"
 import os
 
 def register(commands, ENV):
-    def read_cmd(args):
+    def cat_cmd(args):
+        """
+        Print file content to the screen.
+        Usage: cat <filename>
+        """
         if not args:
             print("Usage: cat <filename>")
             return
 
         target_file = args[0]
         curr_dir = ENV.get("current_dir", os.getcwd())
-        file_path = os.path.abspath(os.path.join(curr_dir, target_file))
+        
+        # Xử lý đường dẫn linh hoạt (hỗ trợ cả đường dẫn tuyệt đối lẫn tương đối)
+        if os.path.isabs(target_file):
+            file_path = target_file
+        else:
+            file_path = os.path.abspath(os.path.join(curr_dir, target_file))
 
         if not os.path.exists(file_path):
-            print(f"E: File not found '{target_file}'")
+            print(f"E: File not found '{target_file}' (Checked in: {curr_dir})")
             return
 
         try:
@@ -21,4 +30,4 @@ def register(commands, ENV):
         except Exception as e:
             print("E: Cannot cat file:", e)
 
-    commands["cat"] = read_cmd
+    commands["cat"] = cat_cmd
