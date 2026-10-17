@@ -1,5 +1,5 @@
 author = "longtrinh2666"
-import os, sys, subprocess, platform
+import os, sys, subprocess, platform, shlex
 
 def register(commands, ENV, name="run"):
     def run_command(args):
@@ -112,7 +112,7 @@ def run_file(filename, commands, ENV):
                         i_b += 1
                         continue
 
-                    parts = stripped_line.split()
+                    parts = shlex.split(stripped_line)
                     if parts:
                         cmd, args_sub = parts[0], parts[1:]
                         if cmd in commands:
@@ -182,7 +182,7 @@ def run_file(filename, commands, ENV):
                     i += 1
                     continue
 
-                parts = stripped_line.split()
+                parts = shlex.split(stripped_line)
                 if parts:
                     cmd, args = parts[0], parts[1:]
                     if cmd in commands:

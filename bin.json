@@ -13,7 +13,7 @@
         "find-1.0.0.py": "03fd1bea862329e56ad634077d7d9da4d34448440f50c2a24deb5b15c1438c0e",
         "grep-1.0.0.py": "870162b3ecdedc0c181d8a1f6d7bf644ddb30d341d5e07221dca3c0abb5c8304",
         "help-1.0.0.py": "9777540d7780ebead8d40d0d1ba66f340f1b34ce3819c351949f40901fccdca0",
-        "if-1.0.0.py": "d928803c9de025532af65aa1b3c2d8a405e8cf127a021279c7241f3c74a72fe9",
+        "if-1.0.0.py": "a2e52ca7eac25eabc6735ed9980f2320ae38cda5db7ac6767fcfd03defbda8f1",
         "ls-1.0.0.py": "585112dbe6ec354ceb0a1f1bc1fbb97d9229ea7f0c02aa816f6366b952744fed",
         "mkdir-1.0.0.py": "f3d2fd2aa562ccb10ff94933769c54cd50ea98034fd11381f81af68e5f48bb47",
         "mkfile-1.0.0.py": "1ff1c2f3920e9942bf618d93dd9a608ba16b8eda8bfd71a4d95f1e6701e59274",
@@ -23,7 +23,7 @@
         "python-1.0.0.py": "3f0cd8d2636052f40c364c67e8b3ca0a6d630ed05c94058113fc7db78e354e27",
         "read-1.0.0.py": "6b0f363a56d5f1ea4b35721b2c16bd043557638e0adf741cfe22d2d3f29e9d52",
         "rm-1.0.0.py": "0940d42a28cff1ae28693bf2c0c02b5b6414d9b91a25ab75b19cf99d6e9eaac7",
-        "run-1.0.0.py": "17ed2d24fde45845b7f9a3c62c56c9cbdc0e53d07635efdfa62800f10ca946f8",
+        "run-1.0.0.py": "f696330a1565ec5b3f258e462cfe670e17b32348c19b0360abab52a6e5452bed",
         "sleep-1.0.0.py": "1c069963770fc544c6c00fb16bee09c7e3b14a99aff1e6f3416399b02f16e413",
         "tar-1.0.0.py": "5ed0f7739d1074bf42c820178c87ccabc9b04620c199f05fd2fdbad845c2e06a",
         "testenv-1.0.0.py": "90a4f11f84f48a8de06a3915bf526353243250c3dfa68475198c45f6e8f00c89",
@@ -31,7 +31,7 @@
         "untar-1.0.0.py": "703e47847eb2bd7508689c0ea4050ed50da029442e90fb7014140d6accf9d13b",
         "unzip-1.0.0.py": "7a156cf57eb7100ac7c158d1ab80a10af050693adf39e81ee63698eaeb66ed8f",
         "ver-1.0.0.py": "f805173ea03d3c12e19c32a01b5ba9f16454442382fa44be5939447f7380f852",
-        "while-1.0.0.py": "d07c38600fbd90c5f1a70baddc59e884f85ec14e4e057cbbee3c1f5328c783b7",
+        "while-1.0.0.py": "da8f7ae4e0f89b04d9765559e8e01012538ee8f9ef0626b190d291f60c6e424b",
         "zip-1.0.0.py": "2e824e9d03ee385d94c11955a55674366dee5f483ff0655775e8abf132b1bd20"
     }
 }

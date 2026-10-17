@@ -1,5 +1,7 @@
 author = "longtrinh2666"
 
+import shlex
+
 def register(commands, ENV):
     def eval_condition(cond_raw, env):
         cond_str = cond_raw.strip()
@@ -42,7 +44,7 @@ def register(commands, ENV):
                     if not line or line.startswith("#"): continue
                     if line == "break": return "break"
                     if line == "continue": return "continue"
-                    parts = line.split()
+                    parts = shlex.split(line)
                     sub_cmd, sub_args = parts[0], parts[1:]
                     if sub_cmd in commands:
                         commands[sub_cmd](sub_args)
@@ -58,7 +60,7 @@ def register(commands, ENV):
                             if not line or line.startswith("#"): continue
                             if line == "break": return "break"
                             if line == "continue": return "continue"
-                            parts = line.split()
+                            parts = shlex.split(line)
                             sub_cmd, sub_args = parts[0], parts[1:]
                             if sub_cmd in commands:
                                 commands[sub_cmd](sub_args)
@@ -71,7 +73,7 @@ def register(commands, ENV):
                 if not line or line.startswith("#"): continue
                 if line == "break": return "break"
                 if line == "continue": return "continue"
-                parts = line.split()
+                parts = shlex.split(line)
                 sub_cmd, sub_args = parts[0], parts[1:]
                 if sub_cmd in commands:
                     commands[sub_cmd](sub_args)
