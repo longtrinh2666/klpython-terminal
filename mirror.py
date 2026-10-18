@@ -3,8 +3,11 @@ import json
 import hashlib
 
 # ==============================================================================
-# KLPYTHON TERMINAL - GENERATOR MIRROR METADATA (V2 NORMALIZED)
+# KLPYTHON TERMINAL - GENERATOR MIRROR METADATA (V3 KERNEL VERSION SUPPORT)
 # ==============================================================================
+
+# Phiên bản hiện tại của kernel hệ thống
+ver = "1.3.0"
 
 def get_normalized_sha256(file_path: str) -> str:
     """
@@ -32,6 +35,8 @@ def generate_mirror_metadata():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     bin_dir = os.path.join(base_dir, "bin")
     mirror_output_path = os.path.join(base_dir, "mirror.json")
+    version_json_filename = f"{ver}.json"
+    version_json_output_path = os.path.join(base_dir, version_json_filename)
 
     if not os.path.exists(bin_dir):
         print(f"[ ERROR ] Không tìm thấy thư mục bin: {bin_dir}")
@@ -40,7 +45,7 @@ def generate_mirror_metadata():
         print(f"👉 Hãy bỏ các file lệnh .py vào thư mục bin/ rồi chạy lại script nhé!")
         return
 
-    print(f"=== Đang quét thư mục bin để tạo metadata chuẩn hóa ===")
+    print(f"=== Đang quét thư mục bin để tạo metadata chuẩn hóa cho phiên bản v{ver} ===")
 
     bin_files_data = {}  # {author: {filename: sha256_hash}}
     pack_list = []       # Danh sách tên file cho khóa "pack"
@@ -75,25 +80,36 @@ def generate_mirror_metadata():
         bin_files_data[author][filename] = file_hash
         print(f"  + Đã quét: {filename} (Tác giả: {author}) -> SHA256: {file_hash[:16]}...")
 
-    # Tạo file bin.json (chứa mã băm) để đẩy lên nhánh mirror/bin.json
+    # 1. Tạo file bin.json (chứa mã băm SHA-256 của các lệnh)
     bin_json_output_path = os.path.join(base_dir, "bin.json")
     with open(bin_json_output_path, "w", encoding="utf-8") as f:
         json.dump(bin_files_data, f, indent=4, ensure_ascii=False)
 
-    # Tạo file mirror.json hoàn chỉnh
+    # 2. Tạo file cấu hình riêng cho phiên bản (Ví dụ: 1.3.0.json chứa danh sách pack)
+    version_data = {
+        "ver": ver,
+        "pack": sorted(pack_list)
+    }
+    with open(version_json_output_path, "w", encoding="utf-8") as f:
+        json.dump(version_data, f, indent=4, ensure_ascii=False)
+
+    # 3. Tạo file mirror.json tổng hợp theo cấu trúc mới có ánh xạ kernel
     mirror_data = {
         "name": "KLpython-official-mirror",
         "bin": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin.json",
         "pack-url": "https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/bin/",
-        "pack": sorted(pack_list)
+        "kernel": {
+            ver: f"https://raw.githubusercontent.com/longtrinh2666/klpython-terminal/refs/heads/mirror/mirror/{version_json_filename}"
+        }
     }
 
     with open(mirror_output_path, "w", encoding="utf-8") as f:
         json.dump(mirror_data, f, indent=4, ensure_ascii=False)
 
-    print(f"\n✅ Đã tạo thành công các file cấu hình chuẩn hóa:")
-    print(f"   - {mirror_output_path} (Nội dung cho file mirror.json trên GitHub)")
-    print(f"   - {bin_json_output_path} (Nội dung cho file bin.json trên nhánh mirror/)")
+    print(f"\n✅ Đã tạo thành công các file cấu hình tương thích hệ thống mới:")
+    print(f"   - {mirror_output_path} (File mirror.json chính)")
+    print(f"   - {bin_json_output_path} (File chứa mã băm bin.json)")
+    print(f"   - {version_json_output_path} (File danh sách gói cho phiên bản v{ver})")
     print(f"==========================================================")
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 author = "longtrinh2666"
+version = "1.0.0"
 import os, platform
 
 def register(commands, name="clear"):

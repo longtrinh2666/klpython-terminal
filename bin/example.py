@@ -4,7 +4,7 @@ def register(commands, plugin_name):
     # đăng ký lệnh theo namespace để tránh trùng
     commands[f"hello"] = hello
 
-plugin_description = "Hello demo plugin"
-plugin_version = "1.0.0"
-plugin_author = "guest"
+description = "Hello demo plugin"
+version = "1.0.0"
+author = "guest"
 # không có plugin_key → chạy sandbox
